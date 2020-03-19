@@ -26,7 +26,7 @@ public class BaseView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //底色
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.YELLOW);
 
         //染料
         Paint paint = new Paint();
@@ -126,26 +126,26 @@ public class BaseView extends View {
         staticLayout1.draw(canvas);*/
 
         //测量文字尺寸
-       /* paint.getFontSpacing();//获取推荐的行距
+        paint.getFontSpacing();//获取推荐的行距
 
         String str = "Hello world girl";
         int offsetX = 40;
         int offsetY = 100;
         canvas.drawText(str, offsetX, offsetY, paint);
 
-        Rect e = new Rect();
-        paint.setStyle(Paint.Style.STROKE);
-        paint.getTextBounds(str, 0, 11, e);//获取文字的显示范围 数据封装在Rect中
-        e.left += offsetX;
-        e.top += offsetY;
-        e.right += offsetX;
-        e.bottom += offsetY;
-        canvas.drawRect(e, paint);
-
-        float width = paint.measureText(str);//获取文字的显示宽度 > 大于getTextBounds()获取到的宽度
-        canvas.drawLine(offsetX, offsetY, offsetX + width, offsetY, paint);
-
-        paint.breakText();//用于多行文字的折行计算*/
+//        Rect e = new Rect();
+//        paint.setStyle(Paint.Style.STROKE);
+//        paint.getTextBounds(str, 0, 11, e);//获取文字的显示范围 数据封装在Rect中
+//        e.left += offsetX;
+//        e.top += offsetY;
+//        e.right += offsetX;
+//        e.bottom += offsetY;
+//        canvas.drawRect(e, paint);
+//
+//        float width = paint.measureText(str);//获取文字的显示宽度 > 大于getTextBounds()获取到的宽度
+//        canvas.drawLine(offsetX, offsetY, offsetX + width, offsetY, paint);
+//
+//        paint.breakText();//用于多行文字的折行计算
 
 //        canvas 范围裁切(限制绘制的范围)
 //        canvas.clipRect(0, 0, 200, 200); //绘制的内容在矩形内
@@ -176,6 +176,31 @@ public class BaseView extends View {
 //        canvas.restore();
 
         // Camera可实现三维变化
+
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        //获得super.onMeasure()测量到的尺寸
+//        int width = getMeasuredWidth();
+//        int height = getMeasuredHeight();
+//        //重新设置View大小
+//        setMeasuredDimension(width / 4, height / 4);
+
+        int width = 3000;
+        int height = 5000;
+        //修正尺寸
+        height = resolveSize(height, heightMeasureSpec);
+        width = resolveSize(width, widthMeasureSpec);
+        //重新设置View大小
+        setMeasuredDimension(width, height);
+
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
     }
 
