@@ -2,10 +2,14 @@ package com.example.customviewapplication;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class BaseLayout extends ViewGroup {
+
+    private static final String TAG = "BaseLayout";
 
     public BaseLayout(Context context) {
         super(context);
@@ -61,4 +65,46 @@ public class BaseLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 分发用户手势
+     * <p>
+     *
+     * @return True if the event was handled(处理) by the view, false otherwise.
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        Log.d(TAG, "dispatchTouchEvent: " + event.getAction());
+        return super.dispatchTouchEvent(event);
+    }
+
+    /**
+     * 拦截手势操作
+     * <p>
+     * ViewGroup 类的方法，View类没有
+     * <p>
+     * dispatchTouchEvent() 方法内会调用改方法
+     * <p>
+     *
+     * @return false 所有事件会先使用该方法处理，再传给target's onTouchEvent()。
+     * true target view will receive the same event but
+     * with the action {@link MotionEvent#ACTION_CANCEL}。
+     * 其他事件直接通过dispatchTouchEvent()发给该View的 onTouchEvent()，不再经过onInterceptTouchEvent()方法
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.d(TAG, "onInterceptTouchEvent: " + ev.getAction());
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    /**
+     * dispatchTouchEvent() 方法内会调用改方法
+     *
+     * @return 如果处理了事件，则为true，否则为false。
+     * 若不消耗，则在同一事件序列中，当前View无法再次接收到事件。
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.d(TAG, "onTouchEvent: " + event.getAction());
+        return super.onTouchEvent(event);
+    }
 }

@@ -9,12 +9,15 @@
     <com.example.customviewapplication.BaseView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.customviewapplication.BaseLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:onClick="test"
+        android:tag="abc"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,6 +26,13 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:text="hello world hello world" />
+
+        <com.example.customviewapplication.BaseButton
+            android:id="@+id/baseButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="test2"
+            android:text="testButton" />
 
         <TextView
             android:layout_width="match_parent"
@@ -41,6 +51,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:text="sTom" />
+
     </com.example.customviewapplication.BaseLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

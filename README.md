@@ -65,3 +65,35 @@
      把测得的它们的尺寸和位置赋值给它们
 
 [自定义ViewGroup](https://hencoder.com/ui-2-3/)
+
+### 事件分发机制
+
+![image_3](app/src/main/res/mipmap-hdpi/image_3.png)
+
+###### boolean dispatchTouchEvent(MotionEvent event)
+    1、分发用户手势
+    
+    2、True if the event was handled(处理) by the view, false otherwise. 
+
+
+###### boolean onInterceptTouchEvent(MotionEvent ev)
+    1、拦截手势操作，ViewGroup 类的方法，View类没有
+    
+    2、dispatchTouchEvent() 方法内会调用改方法 
+     
+    3、return false 所有事件会先使用该方法处理，
+    再传给target's onTouchEvent()。
+    
+    4、return true target view will receive the same event but
+    with the action {@link MotionEvent#ACTION_CANCEL}。
+    其他事件直接通过dispatchTouchEvent()发给该View的 onTouchEvent()，
+    不再经过onInterceptTouchEvent()方法
+
+
+###### boolean onTouchEvent(MotionEvent event)
+    1、dispatchTouchEvent() 方法内会调用改方法
+    
+    2、调用onClick()的地方
+    
+    3、如果处理了事件，则返回true，否则为false。
+    若不消耗，则在同一事件序列中，当前View无法再次接收到事件
