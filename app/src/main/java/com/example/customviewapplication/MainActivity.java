@@ -1,5 +1,6 @@
 package com.example.customviewapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,22 +26,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test(View view) {
-        Toast.makeText(this, "HADADAAA", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "click BaseLayout", Toast.LENGTH_SHORT).show();
     }
 
     public void test2(View view) {
-        Toast.makeText(this, "BBBBBBBB", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, NestedSlidingActivity.class));
     }
 
+    /**
+     * 事件序列最开始的地方
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             Log.d(TAG, "dispatchTouchEvent: " + ev.getAction());
         }
         //这里是仿照源码的格式写的
+        // PhoneWindow -> DockerView -> ViewGroup -> dispatchTouchEvent()
         if (getWindow().superDispatchTouchEvent(ev)) {
             Log.d(TAG, "dispatchTouchEvent: 这里被调用" + ev.getAction());
-            return true;
+            return true;//返回true 表示事件被消耗
         }
         return onTouchEvent(ev);
     }

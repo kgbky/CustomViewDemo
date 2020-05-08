@@ -30,8 +30,7 @@ public class BaseButton extends androidx.appcompat.widget.AppCompatButton {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.d(TAG, "onTouchEvent: " + event.getAction());
-        super.onTouchEvent(event);
-        return false;
+        return super.onTouchEvent(event);
     }
 
 }
