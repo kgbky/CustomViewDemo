@@ -1,6 +1,8 @@
 package com.example.customviewapplication;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,16 +30,21 @@ public class BaseLayout extends ViewGroup {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG, "onMeasure: ");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //调用每一个child View 的 measure 计算子View 大小
         int count = getChildCount();
+        int height = 0;
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
             final LayoutParams lp = child.getLayoutParams();
             final int childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec, 0, lp.width);
             final int childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec, 0, lp.height);
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            height += child.getMeasuredHeight();
         }
+        heightMeasureSpec = resolveSize(height, heightMeasureSpec);
+        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
 
     /**
@@ -45,24 +52,44 @@ public class BaseLayout extends ViewGroup {
      */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        Log.d(TAG, "onLayout: ");
         int count = getChildCount();
         int startX = l;
         int startY = t;
         int offset = 100;
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
-            child.layout(startX, startY, startX + child.getMeasuredWidth() + offset, startY + child.getMeasuredHeight() + offset);
+            int endX = startX + child.getMeasuredWidth();
+            child.layout(startX, startY, endX, startY + child.getMeasuredHeight());
 
-            int endX = startX + child.getMeasuredWidth() + offset;
-            if (endX > r) {
+            if (endX >= r) {
                 //换行
                 startX = l;
-                startY = startY + child.getMeasuredHeight() + offset;
+                startY = startY + child.getMeasuredHeight();
             } else {
                 startX = endX;
             }
 
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        Log.d(TAG, "onDraw: ");
+        super.onDraw(canvas);
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        Log.d(TAG, "dispatchDraw: ");
+        canvas.drawColor(Color.BLACK);
+        super.dispatchDraw(canvas);
+    }
+
+    @Override
+    public void onDrawForeground(Canvas canvas) {
+        Log.d(TAG, "onDrawForeground: ");
+        super.onDrawForeground(canvas);
     }
 
     /**

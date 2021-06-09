@@ -50,21 +50,11 @@
 
 [Google 官方文档](https://developer.android.google.cn/guide/topics/graphics/hardware-accel#determining)
 
-### 自定义布局
+### 自定义ViewGroup
 
-    onMeasure() 自定义View大小
+    重写 onMeasure()、在该方法中计算每个子View的大小，再设置自己的大小
     
-    onLayout() 自定义布局
-
-系统如何工作：
-
-     测量阶段：从上到下递归地调用每个 View 或者 ViewGroup 的 measure() 方法，  
-     测量他们的尺寸并计算它们的位置
-     
-     布局阶段：从上到下递归地调用每个 View 或者 ViewGroup 的 layout() 方法，  
-     把测得的它们的尺寸和位置赋值给它们
-
-[自定义ViewGroup](https://hencoder.com/ui-2-3/)
+    重写 onLayout()、在该方法中调用每个子View的 Layout() 方法
 
 ### 事件分发机制
 
