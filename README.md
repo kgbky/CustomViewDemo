@@ -87,3 +87,8 @@
     
     3、如果处理了事件，则返回true，否则为false。
     若不消耗，则在同一事件序列中，当前View无法再次接收到事件
+    
+###### MotionEvent.ACTION_CANCEL 何时调用
+    1、父View未拦截Down，但是拦截了Move、Up时；子View会收到Down 和 Cancel
+    
+    2、RecyclerView滑动时、子View会收到Cancel。滑动超过一定距离、Recyclerview的onInterceptTouchEvent()会判断用户是想滑动、从而拦截并消费后续的事件。
