@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "dispatchTouchEvent: " + ev.getAction());
         }
         //这里是仿照源码的格式写的
-        // PhoneWindow -> DockerView -> ViewGroup -> dispatchTouchEvent()
+        // PhoneWindow -> DecorView -> ViewGroup -> dispatchTouchEvent()
         if (getWindow().superDispatchTouchEvent(ev)) {
             Log.d(TAG, "dispatchTouchEvent: 这里被调用" + ev.getAction());
             return true;//返回true 表示事件被消耗
