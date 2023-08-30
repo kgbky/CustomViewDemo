@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 public class BaseLayout extends ViewGroup {
 
-    private static final String TAG = "BaseLayout";
+    private static final String TAG = "BaseLayoutTag";
 
     public BaseLayout(Context context) {
         super(context);
@@ -26,7 +26,7 @@ public class BaseLayout extends ViewGroup {
     }
 
     /**
-     * 计算内部布局（计算和保存）
+     * 计算内部布局（计算和保存）会执行多次
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -93,7 +93,7 @@ public class BaseLayout extends ViewGroup {
     }
 
     /**
-     * 分发用户手势
+     * 分发 Touch 事件
      * <p>
      * View 与 ViewGroup 该方法的实现不同
      * <p>
@@ -111,34 +111,50 @@ public class BaseLayout extends ViewGroup {
     }
 
     /**
-     * 拦截手势操作
+     * 可拦截 Touch 事件
      * <p>
      * ViewGroup 类的方法，View类没有
      * <p>
      * dispatchTouchEvent() 方法内会调用改方法
      * <p>
      *
-     * @return false 所有事件会先使用该方法处理，再传给target's onTouchEvent()。
+     * @return false 所有事件会先使用该方法处理，再传给 target's dispatchTouchEvent()。
      * <p>
-     * true target view will receive the same event but
-     * with the action {@link MotionEvent#ACTION_CANCEL}。
-     * 其他事件直接通过dispatchTouchEvent()发给该View的 onTouchEvent()，不再经过onInterceptTouchEvent()方法
+     * true target view will receive the same(同一个) event but with the action {@link MotionEvent#ACTION_CANCEL}。
+     * <p>
+     * 后续事件直接通过 viewGroup 的 dispatchTouchEvent() 发给该 ViewGroup 的 onTouchEvent()，不再经过 onInterceptTouchEvent() 方法
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d(TAG, "onInterceptTouchEvent: " + ev.getAction());
-        return super.onInterceptTouchEvent(ev);
+        boolean b = super.onInterceptTouchEvent(ev);
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN://0
+                b = false;
+                break;
+            case MotionEvent.ACTION_MOVE://2
+                b = true;
+                break;
+            case MotionEvent.ACTION_UP://1
+                b = false;
+                break;
+        }
+        Log.d(TAG, "onInterceptTouchEvent: " + ev.getAction() + " " + b);
+        return b;
     }
 
     /**
      * dispatchTouchEvent() 方法内会调用改方法
      *
      * @return 如果消耗了事件，则为true，否则为false。
+     * <p>
      * 若不消耗，则在同一事件序列中，当前View无法再次接收到事件。
+     * <p>
+     * 自定义处理，需要监听：down/move/up/cancel 事件
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent: " + event.getAction());
-        return super.onTouchEvent(event);
+        boolean b = super.onTouchEvent(event);
+        Log.d(TAG, "onTouchEvent: " + event.getAction() + " " + b);
+        return b;
     }
 }

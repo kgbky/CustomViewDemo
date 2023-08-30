@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 
 public class BaseButton extends androidx.appcompat.widget.AppCompatButton {
 
-    private static final String TAG = "BaseButton";
+    private static final String TAG = "BaseButtonTag";
 
     public BaseButton(Context context) {
         super(context);
