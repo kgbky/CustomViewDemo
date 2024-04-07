@@ -1,10 +1,14 @@
 package com.example.customviewapplication;
 
+import static android.graphics.Paint.Style.FILL;
+
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static android.graphics.Paint.Style.FILL;
 
 public class NestedSlidingActivity extends AppCompatActivity {
 
@@ -33,14 +35,13 @@ public class NestedSlidingActivity extends AppCompatActivity {
                 TextView tv = new TextView(parent.getContext());
                 tv.setLayoutParams(new RecyclerView.LayoutParams(
                         RecyclerView.LayoutParams.MATCH_PARENT, 300));
-                tv.setText(R.string.app_name);
                 tv.setBackgroundResource(R.color.colorPrimary);
                 return new ViewHolder(tv);
             }
 
             @Override
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+                holder.tv.setText(position + "");
             }
 
             @Override
@@ -86,12 +87,27 @@ public class NestedSlidingActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(listAdapter);
     }
+
+    public void test(View view) {
+        float dip = 400;
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dip,
+                r.getDisplayMetrics()
+        );
+        //Translation参数；正数view会向下移动，负数向上移动
+        findViewById(R.id.root).setTranslationY(-px);
+    }
 }
 
 class ViewHolder extends RecyclerView.ViewHolder {
 
+    TextView tv;
+
     public ViewHolder(@NonNull View itemView) {
         super(itemView);
+        tv = (TextView) itemView;
     }
 
 }

@@ -1,68 +1,100 @@
 package com.example.customviewapplication;
 
 import android.content.Context;
-import android.graphics.Rect;
+import android.content.res.Resources;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 重写onInterceptTouchEvent()实现嵌套滑动
  */
-public class MyScrollView extends ScrollView {
+public class MyScrollView extends LinearLayout {
+    private static final String TAG = "MyScrollViewTag";
 
     public MyScrollView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MyScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public MyScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    private RecyclerView child = null;
+    private final int headViewHeight = 1200;
+
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-//        super.onInterceptTouchEvent(ev);
-        return true;
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        child = findViewById(R.id.recyclerView);
     }
 
-    private int touch;
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int newH = MeasureSpec.makeMeasureSpec(headViewHeight + getScreenHeight(), MeasureSpec.EXACTLY);
+        super.onMeasure(widthMeasureSpec, newH);
+    }
+
+    private int getScreenHeight() {
+        Resources resources = this.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        return dm.heightPixels;
+    }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        boolean isUp = false;
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        boolean intercept = false;
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //  保存当前touch的纵坐标值
-                touch = (int) ev.getRawY();
+                downY = ev.getY();
+                startTranslationY = getTranslationY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                isUp = ev.getRawY() < touch;//上滑
+                boolean isUp = ev.getY() < downY;//手指向上滑 页面向下滚动
                 if (isUp) {
-                    //scrollView 滑动完了 再传给 RecyclerView
-                    ImageView iv = findViewById(R.id.iv_image);
-                    Rect c = new Rect();
-                    iv.getLocalVisibleRect(c);
-                    if (iv.getHeight() - (c.bottom - c.top) > 20) {
-                        RecyclerView re = findViewById(R.id.recyclerView);
-                        re.dispatchTouchEvent(ev);
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    intercept = getTranslationY() > -headViewHeight;
                 } else {
-                    //下滑
-                    //RecyclerView 滑动完了 再给 ScrollView
+                    intercept = !child.canScrollVertically(-1);
                 }
                 break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                break;
         }
-        return super.dispatchTouchEvent(ev);
+        Log.d(TAG, "onInterceptTouchEvent: " + ev.getAction() + " intercept = " + intercept);
+        return intercept;
+    }
+
+    private float startTranslationY, downY;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                float offset = ev.getY() - downY;//手指向上滑 页面向下滚动
+                if (offset > 0) { // 下滑 减小偏移量
+                    if (Math.abs(offset) > 12)
+                        setTranslationY(Math.min(startTranslationY + offset, 0));
+                } else {//上滑 加大偏移量
+                    if (Math.abs(offset) > 12)
+                        setTranslationY(Math.max(startTranslationY + offset, -headViewHeight));
+                }
+                break;
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                break;
+        }
+        Log.d(TAG, "onTouchEvent: " + ev.getAction());
+        return true;
     }
 
 }
