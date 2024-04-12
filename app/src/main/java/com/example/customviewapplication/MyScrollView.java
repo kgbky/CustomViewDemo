@@ -39,6 +39,7 @@ public class MyScrollView extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //头部View隐藏之后，RecyclerView高度要等于屏幕高度
         int newH = MeasureSpec.makeMeasureSpec(headViewHeight + getScreenHeight(), MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, newH);
     }

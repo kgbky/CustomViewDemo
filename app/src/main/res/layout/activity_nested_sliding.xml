@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.customviewapplication.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -9,21 +9,28 @@
     tools:context=".NestedSlidingActivity">
 
     <LinearLayout
-        android:id="@+id/iv_image"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
+        <LinearLayout
+            android:id="@+id/iv_image"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:onClick="test" />
+            android:layout_height="400dp"
+            android:background="@color/colorAccent"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:onClick="test" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
-</com.example.customviewapplication.MyScrollView>
+</androidx.core.widget.NestedScrollView>
